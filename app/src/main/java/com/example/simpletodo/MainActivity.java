@@ -37,11 +37,7 @@ public class MainActivity extends AppCompatActivity {
         etAdd = findViewById(R.id.etAdd);
         rvItems = findViewById(R.id.rvItems);
 
-        // Create default list
-        items = new ArrayList<>();
-        items.add("Finish the controller");
-        items.add("Meeting with Jesse");
-        items.add("Have fun!");
+        loadItems();
 
         // Initialize ItemsAdapter
         ItemsAdapter.onLongClickListener longClickListener = new ItemsAdapter.onLongClickListener() {
@@ -52,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
                 // Notify the adapter
                 itemsAdapter.notifyItemRemoved(position);
                 Toast.makeText(getApplicationContext(), "Item was removed", Toast.LENGTH_SHORT).show();
+                saveItems();
             }
         };
 
@@ -70,7 +67,31 @@ public class MainActivity extends AppCompatActivity {
                 // Clear the edit text
                 etAdd.setText("");
                 Toast.makeText(getApplicationContext(), "Item was added", Toast.LENGTH_SHORT).show();
+                saveItems();
             }
         });
+    }
+
+    private File getDataFile() {
+        return new File(getFilesDir(), "data.txt");
+    }
+
+    // Loads items from the data.txt file
+    private void loadItems() {
+        try {
+            items = new ArrayList<>(FileUtils.readLines(getDataFile(), Charset.defaultCharset()));
+        }catch (IOException e) {
+            Log.e("MainActivity", "Error reading items", e);
+            items = new ArrayList<>();
+        }
+    }
+
+    // Writes items into the data.txt file
+    private void saveItems() {
+        try {
+            FileUtils.writeLines(getDataFile(), items);
+        } catch (IOException e) {
+            Log.e("MainActivity", "Error writing items", e);
+        }
     }
 }
