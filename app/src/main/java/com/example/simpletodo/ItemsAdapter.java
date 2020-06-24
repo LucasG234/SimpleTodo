@@ -13,16 +13,22 @@ import java.util.List;
 // Responsible for taking data from the model and putting it into the recycler view
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder>{
 
-    public interface onLongClickListener {
+    public interface OnClickListener {
+        void onItemClicked(int position);
+    }
+
+    public interface OnLongClickListener {
         void onItemLongClicked(int position);
     }
 
     List<String> items;
-    onLongClickListener longClickListener;
+    OnLongClickListener longClickListener;
+    OnClickListener clickListener;
 
-    public ItemsAdapter(List<String> items, onLongClickListener longClickListener) {
+    public ItemsAdapter(List<String> items, OnLongClickListener longClickListener, OnClickListener onClickListener) {
         this.items = items;
         this.longClickListener = longClickListener;
+        this.clickListener = onClickListener;
     }
 
     // Responsible for creating ViewHolders
@@ -61,6 +67,13 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder>{
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvItem = itemView.findViewById(android.R.id.text1);
+            tvItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Notify the listener of the position which was [short] clicked
+                    clickListener.onItemClicked(getAdapterPosition());
+                }
+            });
             tvItem.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
