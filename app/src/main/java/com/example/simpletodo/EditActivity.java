@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.Objects;
+
 public class EditActivity extends AppCompatActivity {
 
     EditText etEdit;
@@ -21,7 +23,7 @@ public class EditActivity extends AppCompatActivity {
         etEdit = findViewById(R.id.etEdit);
         btnEdit = findViewById(R.id.btnEdit);
 
-        getSupportActionBar().setTitle("Edit Item");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Edit Item");
 
         final Intent in = getIntent();
 
@@ -32,11 +34,14 @@ public class EditActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // Create an intent with the results
                 Intent out = new Intent();
+
                 // Pass the edited data
                 out.putExtra(MainActivity.KEY_ITEM_TEXT, etEdit.getText().toString());
                 out.putExtra(MainActivity.KEY_ITEM_POSITION, in.getIntExtra(MainActivity.KEY_ITEM_POSITION, 0));
+
                 // Set the result of the intent
                 setResult(RESULT_OK, out);
+
                 // Finish current intent (close the Activity)
                 finish();
             }

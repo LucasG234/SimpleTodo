@@ -51,9 +51,11 @@ public class MainActivity extends AppCompatActivity {
             public void onItemLongClicked(int position) {
                 // Delete the item from the model
                 items.remove(position);
+
                 // Notify the adapter
                 itemsAdapter.notifyItemRemoved(position);
                 Toast.makeText(getApplicationContext(), "Item was removed", Toast.LENGTH_SHORT).show();
+
                 //Persist the changes
                 saveItems();
             }
@@ -63,9 +65,11 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClicked(int position) {
                 // Create the new EditActivity
                 Intent i = new Intent(MainActivity.this, EditActivity.class);
+
                 // Pass the data to be added
                 i.putExtra(KEY_ITEM_TEXT, items.get(position));
                 i.putExtra(KEY_ITEM_POSITION, position);
+
                 // Display the activity
                 startActivityForResult(i, EDIT_TEXT_CODE);
             }
@@ -78,13 +82,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String strAdd = etAdd.getText().toString();
+
                 // Add new item to model
                 items.add(strAdd);
+
                 // Notify adapter of item insertion
                 itemsAdapter.notifyItemInserted(items.size()-1);
+
                 // Clear the edit text
                 etAdd.setText("");
                 Toast.makeText(getApplicationContext(), "Item was added", Toast.LENGTH_SHORT).show();
+
                 // Persist the changes
                 saveItems();
             }
@@ -95,16 +103,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == EDIT_TEXT_CODE) {
+        if (resultCode == RESULT_OK && requestCode == EDIT_TEXT_CODE && data != null) {
             // Retrieve updated text value and original position
             String updatedText = data.getStringExtra(KEY_ITEM_TEXT);
             int updatedPosition = data.getIntExtra(KEY_ITEM_POSITION, 0);
+
             // Update the model
             items.set(updatedPosition, updatedText);
+
             // Notify the adapter of changes
             itemsAdapter.notifyItemChanged(updatedPosition);
+
             // Persist the changes
             saveItems();
+
             Toast.makeText(getApplicationContext(), "Item was updated", Toast.LENGTH_SHORT).show();
         } else {
             Log.w("MainActivity", "Unknown call to onActivityResult");
