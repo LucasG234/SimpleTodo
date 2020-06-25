@@ -21,14 +21,14 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder>{
         void onItemLongClicked(int position);
     }
 
-    List<String> items;
-    OnLongClickListener longClickListener;
-    OnClickListener clickListener;
+    private List<String> mItems;
+    private OnLongClickListener mLongClickListener;
+    private OnClickListener mClickListener;
 
     public ItemsAdapter(List<String> items, OnLongClickListener longClickListener, OnClickListener onClickListener) {
-        this.items = items;
-        this.longClickListener = longClickListener;
-        this.clickListener = onClickListener;
+        this.mItems = items;
+        this.mLongClickListener = longClickListener;
+        this.mClickListener = onClickListener;
     }
 
     // Responsible for creating ViewHolders
@@ -47,7 +47,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         // Grab the item at the position
-        String item = items.get(position);
+        String item = mItems.get(position);
         // Bind the item into the specified ViewHolder
         holder.bind(item);
     }
@@ -55,31 +55,31 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder>{
     // Tells the RecyclerView how many items are in the list
     @Override
     public int getItemCount() {
-        return items.size();
+        return mItems.size();
     }
 
     // Container to provide easy access to views
     // Each ViewHolder represents one row in the list
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvItem;
+        private TextView mListText;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvItem = itemView.findViewById(android.R.id.text1);
-            tvItem.setOnClickListener(new View.OnClickListener() {
+            mListText = itemView.findViewById(android.R.id.text1);
+            mListText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     // Notify the listener of the position which was [short] clicked
-                    clickListener.onItemClicked(getAdapterPosition());
+                    mClickListener.onItemClicked(getAdapterPosition());
                 }
             });
-            tvItem.setOnLongClickListener(new View.OnLongClickListener() {
+            mListText.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
                     // Notify the listener of the position which was long clicked
 
-                    longClickListener.onItemLongClicked(getAdapterPosition());
+                    mLongClickListener.onItemLongClicked(getAdapterPosition());
                     // Return true because callback is consuming the long click
                     return false;
                 }
@@ -88,7 +88,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder>{
 
         // Responsible for updating the View inside of the ViewHolder with new data
         public void bind(String item) {
-            tvItem.setText(item);
+            mListText.setText(item);
         }
     }
 }
