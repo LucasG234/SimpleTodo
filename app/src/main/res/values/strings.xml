@@ -4,4 +4,8 @@
     <string name="text_add">Add an item here!</string>
     <string name="text_edit">Update the item</string>
     <string name="button_edit">Save</string>
+    <string name="add_toast">Item was added</string>
+    <string name="remove_toast">Item was removed</string>
+    <string name="edit_toast">Item was updated</string>
+    <string name="edit_bar_title">Edit Item</string>
 </resources>

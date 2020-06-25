@@ -27,11 +27,11 @@ public class MainActivity extends AppCompatActivity {
     public static final String KEY_ITEM_POSITION = "item_position";
     public static final int EDIT_TEXT_CODE = 30;
 
-    List<String> items;
-    Button btnAdd;
-    EditText etAdd;
-    RecyclerView rvItems;
-    ItemsAdapter itemsAdapter;
+    private List<String> items;
+    private Button mTodoAddButton;
+    private EditText mTodoAddText;
+    private RecyclerView mTodoRecyclerView;
+    private ItemsAdapter mItemsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +39,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Retrieve instances of all views
-        btnAdd = findViewById(R.id.btnAdd);
-        etAdd = findViewById(R.id.etAdd);
-        rvItems = findViewById(R.id.rvItems);
+        mTodoAddButton = findViewById(R.id.btnAdd);
+        mTodoAddText = findViewById(R.id.etAdd);
+        mTodoRecyclerView = findViewById(R.id.rvItems);
 
         loadItems();
 
@@ -53,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
                 items.remove(position);
 
                 // Notify the adapter
-                itemsAdapter.notifyItemRemoved(position);
-                Toast.makeText(getApplicationContext(), "Item was removed", Toast.LENGTH_SHORT).show();
+                mItemsAdapter.notifyItemRemoved(position);
+                Toast.makeText(getApplicationContext(), getString(R.string.remove_toast), Toast.LENGTH_SHORT).show();
 
                 //Persist the changes
                 saveItems();
@@ -74,24 +74,24 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(i, EDIT_TEXT_CODE);
             }
         };
-        itemsAdapter = new ItemsAdapter(items, longClickListener, clickListener);
-        rvItems.setAdapter(itemsAdapter);
-        rvItems.setLayoutManager(new LinearLayoutManager(this));
+        mItemsAdapter = new ItemsAdapter(items, longClickListener, clickListener);
+        mTodoRecyclerView.setAdapter(mItemsAdapter);
+        mTodoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        btnAdd.setOnClickListener(new View.OnClickListener() {
+        mTodoAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String strAdd = etAdd.getText().toString();
+                String strAdd = mTodoAddText.getText().toString();
 
                 // Add new item to model
                 items.add(strAdd);
 
                 // Notify adapter of item insertion
-                itemsAdapter.notifyItemInserted(items.size()-1);
+                mItemsAdapter.notifyItemInserted(items.size()-1);
 
                 // Clear the edit text
-                etAdd.setText("");
-                Toast.makeText(getApplicationContext(), "Item was added", Toast.LENGTH_SHORT).show();
+                mTodoAddText.setText("");
+                Toast.makeText(getApplicationContext(), getString(R.string.add_toast), Toast.LENGTH_SHORT).show();
 
                 // Persist the changes
                 saveItems();
@@ -112,12 +112,12 @@ public class MainActivity extends AppCompatActivity {
             items.set(updatedPosition, updatedText);
 
             // Notify the adapter of changes
-            itemsAdapter.notifyItemChanged(updatedPosition);
+            mItemsAdapter.notifyItemChanged(updatedPosition);
 
             // Persist the changes
             saveItems();
 
-            Toast.makeText(getApplicationContext(), "Item was updated", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.edit_toast), Toast.LENGTH_SHORT).show();
         } else {
             Log.w("MainActivity", "Unknown call to onActivityResult");
         }

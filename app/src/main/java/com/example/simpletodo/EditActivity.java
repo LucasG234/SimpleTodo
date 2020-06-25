@@ -12,31 +12,31 @@ import java.util.Objects;
 
 public class EditActivity extends AppCompatActivity {
 
-    EditText etEdit;
-    Button btnEdit;
+    private EditText mTodoEditText;
+    private Button mTodoEditButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
 
-        etEdit = findViewById(R.id.etEdit);
-        btnEdit = findViewById(R.id.btnEdit);
+        mTodoEditText = findViewById(R.id.etEdit);
+        mTodoEditButton = findViewById(R.id.btnEdit);
 
-        Objects.requireNonNull(getSupportActionBar()).setTitle("Edit Item");
+        Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.edit_bar_title));
 
         final Intent in = getIntent();
 
-        etEdit.setText(in.getStringExtra(MainActivity.KEY_ITEM_TEXT));
+        mTodoEditText.setText(in.getStringExtra(MainActivity.KEY_ITEM_TEXT));
 
-        btnEdit.setOnClickListener(new View.OnClickListener() {
+        mTodoEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Create an intent with the results
                 Intent out = new Intent();
 
                 // Pass the edited data
-                out.putExtra(MainActivity.KEY_ITEM_TEXT, etEdit.getText().toString());
+                out.putExtra(MainActivity.KEY_ITEM_TEXT, mTodoEditText.getText().toString());
                 out.putExtra(MainActivity.KEY_ITEM_POSITION, in.getIntExtra(MainActivity.KEY_ITEM_POSITION, 0));
 
                 // Set the result of the intent
